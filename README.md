@@ -52,9 +52,9 @@ The primary goal of this project is to:
 - ** Refer to documentation or additional resources in the docs/ directory for further guidance.
 
 # Contributors
-- ** [Omar Younis]([link_to_your_profile](https://github.com/oyounis19)) - Project Lead
-- ** Omar Youssef  - Project Lead
-- ** Omar Adel     - Project Lead
-- ** Khaled Ashraf - Project Lead
-- ** Hanafi        - Project Lead
-- ** Hytham        - Project Lead
+- ** [Omar Younis](https://github.com/oyounis19) - Project Lead
+- ** Omar Youssef 
+- ** Omar Adel    
+- ** Khaled Ashraf
+- ** Hanafi
+- ** Hytham
