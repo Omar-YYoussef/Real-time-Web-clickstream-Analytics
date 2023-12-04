@@ -52,4 +52,9 @@ The primary goal of this project is to:
 - ** Refer to documentation or additional resources in the docs/ directory for further guidance.
 
 # Contributors
-- ** Your Name - Project Lead
+- ** Omar Younis   - Project Lead
+- ** Omar Youssef  - Project Lead
+- ** Omar Adel     - Project Lead
+- ** Khaled Ashraf - Project Lead
+- ** Hanafi        - Project Lead
+- ** Hytham        - Project Lead
