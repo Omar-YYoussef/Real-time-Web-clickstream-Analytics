@@ -47,14 +47,14 @@ The primary goal of this project is to:
    git clone https://github.com/oyounis19/Real-time-Web-clickstream-Analytics.git
 # Usage
 
-- **Use the provided code snippets or scripts in the code/ directory to perform data ingestion, Apache Spark processing, and analytics.
-- **Explore the clickstream data in the data/ directory for analysis and experimentation.
-- **Refer to documentation or additional resources in the docs/ directory for further guidance.
+- **Use the provided code snippets** or scripts in the code/ directory to perform data ingestion, Apache Spark processing, and analytics.
+- **Explore the clickstream data** in the data/ directory for analysis and experimentation.
+- **Refer to documentation** or additional resources in the docs/ directory for further guidance.
 
 # Contributors
-- **[Omar Younis](https://github.com/oyounis19) - Project Lead
-- **Omar Youssef 
-- **Omar Adel    
-- **Khaled Ashraf
-- **Hanafi
-- **Hytham
+- [**Omar Younis**](https://github.com/oyounis19) - Project Lead
+- **Omar Youssef**
+- **Omar Adel**    
+- **Khaled Ashraf**
+- **Hanafi**
+- **Hytham**
