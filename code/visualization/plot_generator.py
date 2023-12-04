@@ -14,5 +14,5 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 # Save or display plot
-# plt.savefig('page_visit_counts.png')
+plt.savefig('page_visit_counts.png')
 plt.show()

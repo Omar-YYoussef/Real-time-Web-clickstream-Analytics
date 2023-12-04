@@ -10,6 +10,16 @@
             "kind": "build",
             "isDefault": true
         }
+    },
+    {
+        "label": "Run Kafka Producer",
+        "type": "shell",
+        "command": "python",
+        "args": ["C:/Users/oyoun/OneDrive/Desktop/COLLEGE/3rd Year/1st Semister/BD/Project/Code/code/data_ingestion/kafka_producer.py"],
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        }
     }
     ]
 }

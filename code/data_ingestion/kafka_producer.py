@@ -13,7 +13,7 @@ producer = Producer(kafka_config)
 topic = 'clickstream_topic'
 
 # Load the dataset
-data = pd.read_csv('../../data/Dataset.csv')
+data = pd.read_csv('data/Dataset.csv')
 
 # Convert data to JSON and publish to Kafka topic
 for _, row in data.iterrows():
