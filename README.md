@@ -54,7 +54,7 @@ The primary goal of this project is to:
 # Contributors
 - [**Omar Younis**](https://github.com/oyounis19) - Project Lead
 - [**Omar Youssef**](https://github.com/Omar-YYoussef)
-- **Omar Adel**    
+- [**Omar Adel**](https://github.com/omar55549)
 - [**Khaled Ashraf**](https://github.com/khaaaleed-5)
 - [**Hanafi**](https://github.com/mohamedhanfi)
-- **Hytham**
+- [**Hytham**](https://github.com/MedoHaytham)
