@@ -1,5 +1,8 @@
 from confluent_kafka import Producer
 import pandas as pd
+from pyspark.sql import SparkSession
+
+Ss = SparkSession.builder.appName('Kafka Producer').getOrCreate()
 
 # Kafka broker configuration
 kafka_config = {
@@ -10,10 +13,10 @@ kafka_config = {
 producer = Producer(kafka_config)
 
 # Topic to which data will be published
-topic = 'clickstream_topic'
+topic = 'clickstreamV1'
 
 # Load the dataset
-data = pd.read_csv('data/Dataset.csv')
+data = Ss.read.csv('data/Dataset.csv')
 
 # Convert data to JSON and publish to Kafka topic
 for _, row in data.iterrows():
