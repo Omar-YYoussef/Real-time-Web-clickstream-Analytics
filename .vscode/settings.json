@@ -1,4 +1,20 @@
 {
     "python.analysis.typeCheckingMode": "off",
-    "python.analysis.autoImportCompletions": true
+    "python.analysis.autoImportCompletions": true,
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "p3nlmysql47plsk.secureserver.net",
+            "port": 3306,
+            "driver": "MySQL",
+            "username": "bigdata",
+            "password": "hytham123",
+            "database": "Clickstream_DB",
+            "name": "Click Stream"
+        }
+    ]
 }

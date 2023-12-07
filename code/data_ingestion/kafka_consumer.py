@@ -72,8 +72,8 @@ def insert_into_db(row):
 query = df.writeStream \
     .outputMode("append") \
     .format("console") \
-    .foreach(insert_into_db) \
     .start()
+    # .foreach(insert_into_db) \
 
 # Wait for query termination
 query.awaitTermination()
