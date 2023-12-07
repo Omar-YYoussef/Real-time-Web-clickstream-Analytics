@@ -1,27 +1,58 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
-from pyspark.sql.functions import from_json
-from pyspark.sql.types import StructType, StringType, IntegerType
+from pyspark.sql.types import *
+import pymysql
 
-
-spark = SparkSession.builder\
-    .appName('kafka consumer')\
+# Create a Spark session
+spark = SparkSession.builder \
+    .appName("Kafka_Consumer") \
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.4") \
     .getOrCreate()
-    
-spark.sparkContext.setLogLevel('WARN')
-schema = StructType().add("User ID", IntegerType()).add("Session Start", StringType())\
-    .add("Time", StringType()).add("Page URL",StringType).add("Timestamp",StringType)\
-    .add("Duration on Page (s)",StringType).add("Interaction Type",StringType).add("Device Type",StringType)\
-    .add("Browser",StringType).add("Country",StringType).add("Referrer",StringType)
 
+# Display only WARN messages
+spark.sparkContext.setLogLevel('WARN')
+
+# Define the schema for the dataset
+# schema = (
+#     StructType()
+#     .add("User ID", StringType(), True)
+#     .add("Session Start Time", TimestampType(), True)
+#     .add("Page URL", StringType(), True)
+#     .add("Timestamp", TimestampType(), True)
+#     .add("Duration on Page (s)", IntegerType(), True)
+#     .add("Interaction Type", StringType(), True)
+#     .add("Device Type", StringType(), True)
+#     .add("Browser", StringType(), True)
+#     .add("Country", StringType(), True)
+#     .add("Referrer", StringType(), True)
+# )
+schema = (
+    StructType()
+    .add("id", StringType())
+    .add("name", StringType())
+    .add("gender", StringType())
+)
+
+# Topic from which data will be consumed
 kafka_topic = "clickstreamV1"
-data = spark.readStream\
-    .format("kafka")\
-    .option("kafka.bootstrap.servers", "localhost:9092")\
-    .option("subscribe", kafka_topic)\
-    .load()\
+
+# Read from Kafka topic
+df = spark.readStream \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", "localhost:9092") \
+    .option("subscribe", kafka_topic) \
+    .load() \
     .select(from_json(col("value").cast("string"), schema).alias("data"))
-data = data.selectExpr("CAST(value AS STRING)")
-query = data.writeStream.outputMode("append").format("console").start()
+
+# Cast the value column to string
+# df = df.selectExpr("CAST(value AS STRING)")
+df = df.select("data.*")
+# Write to console
+query = df.writeStream \
+    .outputMode("append") \
+    .format("console") \
+    .start()
+    # .foreach(insert_into_phpmyadmin) \
+
+# Wait for query termination
 query.awaitTermination()
