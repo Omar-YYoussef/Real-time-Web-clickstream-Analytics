@@ -1,4 +1,4 @@
-User ID,Session Start Time,Page URL,Timestamp,Duration on Page (s),Interaction Type,Device Type,Browser,Country,Referrer
+user_id,Session_Start_Time,Page_URL,Timestamp,Duration_on_Page_s,Interaction_Type,Device_Type,Browser,Country,Referrer
 b4df3ce0-15a8-4c37-9a9f-8d1986b24b7d,2023-11-17 11:14:30,login,2023-11-28 16:45:00,26,form_submit,mobile,"Mozilla/5.0 (Windows; U; Windows 98) AppleWebKit/535.12.3 (KHTML, like Gecko) Version/5.0.3 Safari/535.12.3",LY,https://west.net/bloglogin.php
 b4df3ce0-15a8-4c37-9a9f-8d1986b24b7d,2023-11-17 11:14:30,main,2023-11-17 15:50:54,236,form_submit,mobile,Mozilla/5.0 (Macintosh; PPC Mac OS X 10_11_9; rv:1.9.6.20) Gecko/7560-07-12 15:27:25 Firefox/3.8,AG,http://wolfe.com/mainindex.html
 b4df3ce0-15a8-4c37-9a9f-8d1986b24b7d,2023-11-17 11:14:30,terms,2023-11-19 10:54:08,181,exit,desktop,Mozilla/5.0 (Android 2.2; Mobile; rv:46.0) Gecko/46.0 Firefox/46.0,KI,http://www.jenkins-taylor.com/blogsearch.html
