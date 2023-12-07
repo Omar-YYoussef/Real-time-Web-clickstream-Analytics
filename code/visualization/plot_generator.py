@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
-sys.path.append(r'D:\Real-time-Web-clickstream-Analytics\code')
+sys.path.append(r'\Real-time-Web-clickstream-Analytics\code')
 
 from data_processing.analytics_class import Analytics
 from pyspark.sql import SparkSession
