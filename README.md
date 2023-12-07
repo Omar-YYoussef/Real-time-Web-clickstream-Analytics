@@ -25,7 +25,7 @@ The primary goal of this project is to:
 - Includes code snippets or scripts used for data ingestion, Apache Spark processing, and analytics.
 
 ### `docs/`
-- Additional documentation or project-related resources.
+- Additional documentation, project-related resources, and kafka commands.
 
 ### `results/`
 - Outputs, reports, or visualizations showcasing insights derived from the analysis.
