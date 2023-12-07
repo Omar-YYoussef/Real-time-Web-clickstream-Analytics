@@ -43,14 +43,38 @@ df = df.select("data.*")
 
 
 # PROCESSING
+def insert_into_db(row):
+    # Define the connection details for your PHPMyAdmin database
+    host = "p3nlmysql47plsk.secureserver.net"
+    port = 3306
+    database = "big_data"
+    username = "root"
+    password = ""
+    
+    conn = pymysql.connect(host=host, port=port, user=username, passwd=password, db=database)
+    cursor = conn.cursor()
+
+    # Extract the required columns from the row
+    column1_value = row.name
+    column2_value = row.age
+
+    # Prepare the SQL query to insert data into the table
+    sql_query = f"INSERT INTO user (name, age) VALUES ('{column1_value}', '{column2_value}')"
+    
+    # Execute the SQL query
+    cursor.execute(sql_query)
+
+    # Commit the changes
+    conn.commit()
+    conn.close()
 
 
 # Write to console
 query = df.writeStream \
     .outputMode("append") \
     .format("console") \
+    .foreach(insert_into_db) \
     .start()
-    # .foreach(insert_into_phpmyadmin) \
 
 # Wait for query termination
 query.awaitTermination()

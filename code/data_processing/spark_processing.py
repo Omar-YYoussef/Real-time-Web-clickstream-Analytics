@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import desc
-from pyspark.sql.functions import countDistinct
-from pyspark.sql.functions import min, max, avg
+from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
+
 # Initialize SparkSession
 spark = SparkSession.builder.appName('ClickstreamAnalytics').getOrCreate()
 
@@ -9,9 +8,42 @@ spark = SparkSession.builder.appName('ClickstreamAnalytics').getOrCreate()
 clickstream_data = spark.read.csv('data/data_stream/Dataset.csv', header=True, inferSchema=True)
 
 # Perform analytics or processing
-average_duration = clickstream_data.select(avg("Duration_on_Page_s")).collect()[0][0]
-print(f"Average Duration on Page: {average_duration} seconds")
 
+# Load additional data
+additional_data = spark.read.csv('additional_data.csv', header=True, inferSchema=True)
+
+# Perform a join operation
+joined_data = clickstream_data.join(
+    additional_data,
+    clickstream_data['User ID'] == additional_data['User ID'],
+    'inner'
+)
+
+# Perform additional analytics or calculations using the joined data
+# For example, calculate the average duration per user
+avg_duration_per_user = joined_data \
+    .groupBy('User ID') \
+    .agg(avg('Duration_on_Page_s').alias('Avg_Duration_per_User'))
+
+# Show results
+avg_duration_per_user.show()
+
+
+# Calculate average duration on each page in seconds
+avg_duration_per_page = clickstream_data \
+    .groupBy('Page_URL') \
+    .agg(avg('Duration_on_Page_s').alias('Avg_Duration_on_Page'))
+
+# Convert duration from seconds to minutes and seconds
+avg_duration_per_page = avg_duration_per_page \
+    .withColumn('Avg_Duration_minutes', floor(col('Avg_Duration_on_Page') / 60)) \
+    .withColumn('Avg_Duration_seconds', col('Avg_Duration_on_Page') % 60) \
+    .select('Page_URL', 'Avg_Duration_minutes', 'Avg_Duration_seconds')
+
+# Show results
+avg_duration_per_page.show()
+
+# Count of Sessions per Country
 sessions_per_country = clickstream_data.groupBy("Country").count().withColumnRenamed("count", "Session Count")
 sessions_per_country.show()
 # Calculate page visit counts
