@@ -41,7 +41,6 @@ df = spark.readStream \
 # Cast the value column to string
 df = df.select("data.*")
 
-
 # PROCESSING
 def insert_into_db(row):
     # Define the connection details for your PHPMyAdmin database
