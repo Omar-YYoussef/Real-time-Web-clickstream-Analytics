@@ -24,4 +24,4 @@ data = spark.readStream\
     .select(from_json(col("value").cast("string"), schema).alias("data"))
 data = data.selectExpr("CAST(value AS STRING)")
 query = data.writeStream.outputMode("append").format("console").start()
-# query.awaitTermination()
+query.awaitTermination()
