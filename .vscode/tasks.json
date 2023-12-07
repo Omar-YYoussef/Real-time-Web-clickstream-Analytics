@@ -15,7 +15,7 @@
         "label": "Run Kafka Producer",
         "type": "shell",
         "command": "python",
-        "args": ["../code/data_ingestion/kafka_producer.py"],
+        "args": ["code/data_ingestion/kafka_producer.py"],
         "group": {
             "kind": "build",
             "isDefault": true

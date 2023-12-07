@@ -10,7 +10,7 @@ kafka_config = {
 producer = Producer(kafka_config)
 
 # Topic to which data will be published
-topic = 'clickstream_topic'
+topic = 'clickstream'
 
 # Load the dataset
 data = pd.read_csv('data/Dataset.csv')
