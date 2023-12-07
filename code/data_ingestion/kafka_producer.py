@@ -2,6 +2,7 @@ from kafka import KafkaProducer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import json
+import csv
 
 # Kafka broker configuration
 kafka_config = {
@@ -31,10 +32,10 @@ class FileEventHandler(FileSystemEventHandler):
         # Check if the file is a CSV file
         elif file_path.endswith('.csv'):
             with open(file_path, 'r') as file:
-                # Process CSV data and send to Kafka topic
-                lines = file.readlines()
-                for line in lines:
-                    producer.send(kafka_config['topic'], value=line.encode())
+                # Process CSV data and send each row to Kafka topic
+                csv_reader = csv.DictReader(file)
+                for row in csv_reader:
+                    producer.send(kafka_config['topic'], value=json.dumps(row).encode())
 
 # Watchdog observer to monitor the directory for file events
 observer = Observer()
@@ -51,14 +52,3 @@ except KeyboardInterrupt:
     observer.stop()
 
 observer.join()
-
-
-
-# Load the dataset
-# data = Ss.read.csv('data/Dataset.csv')
-# # Convert data to JSON and publish to Kafka topic
-# for _, row in data.iterrows():
-#     message = row.to_json()  # Convert row to JSON
-#     producer.produce(topic, value=message)  # Publish to Kafka topic
-
-# producer.flush()  # Wait for all messages to be delivered

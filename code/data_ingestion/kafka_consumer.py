@@ -13,24 +13,18 @@ spark = SparkSession.builder \
 spark.sparkContext.setLogLevel('WARN')
 
 # Define the schema for the dataset
-# schema = (
-#     StructType()
-#     .add("User ID", StringType(), True)
-#     .add("Session Start Time", TimestampType(), True)
-#     .add("Page URL", StringType(), True)
-#     .add("Timestamp", TimestampType(), True)
-#     .add("Duration on Page (s)", IntegerType(), True)
-#     .add("Interaction Type", StringType(), True)
-#     .add("Device Type", StringType(), True)
-#     .add("Browser", StringType(), True)
-#     .add("Country", StringType(), True)
-#     .add("Referrer", StringType(), True)
-# )
 schema = (
     StructType()
-    .add("id", StringType())
-    .add("name", StringType())
-    .add("gender", StringType())
+    .add("user_id", StringType(), True)
+    .add("Session_Start_Time", TimestampType(), True)
+    .add("Page_URL", StringType(), True)
+    .add("Timestamp", TimestampType(), True)
+    .add("Duration_on_Page_s", StringType(), True)
+    .add("Interaction_Type", StringType(), True)
+    .add("Device_Type", StringType(), True)
+    .add("Browser", StringType(), True)
+    .add("Country", StringType(), True)
+    .add("Referrer", StringType(), True)
 )
 
 # Topic from which data will be consumed
@@ -45,8 +39,12 @@ df = spark.readStream \
     .select(from_json(col("value").cast("string"), schema).alias("data"))
 
 # Cast the value column to string
-# df = df.selectExpr("CAST(value AS STRING)")
 df = df.select("data.*")
+
+
+# PROCESSING
+
+
 # Write to console
 query = df.writeStream \
     .outputMode("append") \
