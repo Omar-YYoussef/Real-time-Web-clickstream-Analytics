@@ -1,75 +1,60 @@
 import matplotlib.pyplot as plt
-
-# Load processed data or results
-# For example:
-page_visit_counts = [('/home', 100), ('/products', 80), ('/about', 60)]
-
-# Plotting
-pages, counts = zip(*page_visit_counts)
-plt.bar(pages, counts)
-plt.xlabel('Page URL')
-plt.ylabel('Visit Count')
-plt.title('Page Visit Counts')
-plt.xticks(rotation=45)
-plt.tight_layout()
-
-# Save or display plot
-plt.savefig('page_visit_counts.png')
-plt.show()
-
-################
-
-import matplotlib.pyplot as plt
 import seaborn as sns
+from data_processing.analytics_class import Analytics
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import avg, countDistinct, desc, max, min
 
-# Initialize SparkSession
-spark = SparkSession.builder.appName('ClickstreamAnalytics').getOrCreate()
-
-# Load clickstream data
+#making session and reading data
+spark = SparkSession.builder.appName('Plotting_data').getOrCreate()
 clickstream_data = spark.read.csv('data/data_stream/Dataset.csv', header=True, inferSchema=True)
 
-# Calculate page visit counts
-page_visit_counts = clickstream_data \
-    .groupBy('Page_URL') \
-    .count() \
-    .orderBy('count', ascending=False) \
-    .sort('count')
+
+# calculate Page visits
+page_visit_counts=Analytics.calculate_page_visit_counts(clickstream_data)
 
 # Calculate average duration per page URL
-avg_duration_per_page = clickstream_data \
-    .groupBy('Page_URL') \
-    .agg(avg('Duration_on_Page_s').alias('avg_duration')) \
-    .orderBy('avg_duration', ascending=False)
+avg_duration_per_page=Analytics.avg_duration_per_page(clickstream_data)
 
 # Count interaction types
-interaction_counts = clickstream_data \
-    .groupBy('Interaction_Type') \
-    .count() \
-    .orderBy('count', ascending=False)
+interaction_counts=Analytics.count_interaction_types(clickstream_data)
+
 
 # Device type distribution
-device_type_distribution = clickstream_data \
-    .groupBy('Device_Type') \
-    .count() \
-    .orderBy('count', ascending=False)
+device_type_distribution=Analytics.device_type_distribution(clickstream_data)
 
-# Most common browsers
-common_browsers = clickstream_data \
-    .groupBy('Browser') \
-    .count() \
-    .orderBy('count', ascending=False)
+#Session Per Country
+Session_per_Country=Analytics.count_sessions_per_country(clickstream_data)
+
+
+#Page viewing by country
+page_view_country=Analytics.page_views_by_country(clickstream_data)
 
 # Convert Spark DataFrames to Pandas DataFrames for plotting
 page_visit_counts_pd = page_visit_counts.toPandas()
 avg_duration_per_page_pd = avg_duration_per_page.toPandas()
 interaction_counts_pd = interaction_counts.toPandas()
 device_type_distribution_pd = device_type_distribution.toPandas()
-common_browsers_pd = common_browsers.toPandas()
+Session_per_Country_pd=Session_per_Country.toPandas()
+page_view_country_pd=page_view_country.toPandas()
+
 
 # Set the style for seaborn plots
 sns.set(style="whitegrid")
+
+#plot page view by country
+plt.figure(figsize=(12, 6))
+sns.barplot(x='Country', y='count', data=Session_per_Country_pd)
+plt.title('Page view per Country Counts')
+plt.xlabel('Country')
+plt.ylabel('Count')
+plt.show()
+
+#plot Session per Country
+plt.figure(figsize=(12, 6))
+sns.barplot(x='user_id', y='count', data=Session_per_Country_pd)
+plt.title('Session per Country Counts')
+plt.xlabel('Country')
+plt.ylabel('Count')
+plt.show()
 
 # Plot page visit counts
 plt.figure(figsize=(12, 6))
@@ -100,14 +85,6 @@ plt.figure(figsize=(12, 6))
 sns.barplot(x='Device_Type', y='count', data=device_type_distribution_pd)
 plt.title('Device Type Distribution')
 plt.xlabel('Device Type')
-plt.ylabel('Count')
-plt.show()
-
-# Plot most common browsers
-plt.figure(figsize=(12, 6))
-sns.barplot(x='Browser', y='count', data=common_browsers_pd)
-plt.title('Common Browsers')
-plt.xlabel('Browser')
 plt.ylabel('Count')
 plt.show()
 
