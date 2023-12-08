@@ -98,4 +98,3 @@ class Analytics:
         return page_views_by_country
     
 
-
