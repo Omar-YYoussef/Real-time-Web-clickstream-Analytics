@@ -1,51 +1,12 @@
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
 
 import pandas as pd
-import mysql.connector
+from DBConnection import DB
 
-# Replace these values with your actual database connection details
-db_user = 'bigdata'
-db_pass = 'hytham123'
-host = 'p3nlmysql47plsk.secureserver.net'
-port = 3306
-database_name = 'Clickstream_DB'
-
-# Establish a connection
-connection = mysql.connector.connect(
-    user=db_user,
-    password=db_pass,
-    host=host,
-    port=port,
-    database=database_name
-)
-
+db = DB()
 # Create a cursor
-cursor = connection.cursor()
+cursor = db.connection.cursor()
 
-insert_query = "INSERT INTO DeviceTypeCounts (Device_Type, Count) VALUES (%s, %s)"
-values_to_insert = ('SAMSUN', '1550')
-cursor.execute(insert_query, values_to_insert)
-
-# Commit the transaction
-connection.commit()
-
-
-select_query = "SELECT * FROM DeviceTypeCounts"
-
-# Execute the select query
-cursor.execute(select_query)
-
-# Fetch all rows and create a pandas DataFrame
-columns = [desc[0] for desc in cursor.description]
-data = cursor.fetchall()
-df = pd.DataFrame(data, columns=columns)
-
-# Display the updated DataFrame
-print("Updated Table:")
-print(df)
-# Close the cursor and connection
-cursor.close()
-connection.close()
 
 class Analytics:
 
@@ -97,7 +58,13 @@ class Analytics:
             .count() \
             .orderBy('count', ascending=False) \
             .sort('count')
-
+        
+        for counnt in page_visit_counts:
+            insert_query = "INSERT INTO Page_URLCounts (Page_URL, Count) VALUES (%s, %s)"
+            #values_to_insert = ('laptop', '15550')
+            cursor.execute(insert_query,counnt)
+            # Commit the transaction
+            db.connection.commit()
         return page_visit_counts
 
     @staticmethod
@@ -139,5 +106,24 @@ class Analytics:
             .groupBy('Country') \
             .count() \
             .orderBy('count', ascending=False)
-
+        
         return page_views_by_country
+    
+
+
+select_query = "SELECT * FROM DeviceTypeCounts"
+
+# Execute the select query
+cursor.execute(select_query)
+
+# Fetch all rows and create a pandas DataFrame
+columns = [desc[0] for desc in cursor.description]
+data = cursor.fetchall()
+df = pd.DataFrame(data, columns=columns)
+
+# Display the updated DataFrame
+print("Updated Table:")
+print(df)
+# Close the cursor and connection
+cursor.close()
+db.connection.close()

@@ -1,32 +1,18 @@
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
+
 import pandas as pd
-import mysql.connector
+from DBConnection import DB
 
-# Replace these values with your actual database connection details
-db_user = 'bigdata'
-db_pass = 'hytham123'
-host = 'p3nlmysql47plsk.secureserver.net'
-port = 3306
-database_name = 'Clickstream_DB'
-
-# Establish a connection
-connection = mysql.connector.connect(
-    user=db_user,
-    password=db_pass,
-    host=host,
-    port=port,
-    database=database_name
-)
-
+db = DB()
 # Create a cursor
-cursor = connection.cursor()
+cursor = db.connection.cursor()
 
 insert_query = "INSERT INTO DeviceTypeCounts (Device_Type, Count) VALUES (%s, %s)"
-values_to_insert = ('SAMSUN', '1550')
+values_to_insert = ('laptop', '15550')
 cursor.execute(insert_query, values_to_insert)
 
 # Commit the transaction
-connection.commit()
+db.connection.commit()
 
 
 select_query = "SELECT * FROM DeviceTypeCounts"
@@ -44,4 +30,4 @@ print("Updated Table:")
 print(df)
 # Close the cursor and connection
 cursor.close()
-connection.close()
+db.connection.close()
