@@ -1,6 +1,8 @@
+from ..data_processing.analytics_class import Analytics
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
+from re import A
 import pymysql
 
 # Create a Spark session
@@ -40,6 +42,7 @@ df = spark.readStream \
 
 # Cast the value column to string
 df = df.select("data.*")
+df = Analytics.all_analytics(df)
 
 # PROCESSING
 def insert_into_db(row):

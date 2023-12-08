@@ -6,6 +6,29 @@ class Analytics:
         pass
 
     @staticmethod
+    def all_analytics(df):
+        """
+        Perform all analytics
+        :param df: pandas dataframe
+        :return: dataframe with all analytics
+        """
+        avg_duration_per_page = Analytics.avg_duration_per_page(df)
+        sessions_per_country = Analytics.count_sessions_per_country(df)
+        page_visit_counts = Analytics.calculate_page_visit_counts(df)
+        interaction_counts = Analytics.count_interaction_types(df)
+        device_type_distribution = Analytics.device_type_distribution(df)
+        page_views_by_country = Analytics.page_views_by_country(df)
+
+        # Merge all dataframes into one
+        result = avg_duration_per_page.join(sessions_per_country, "Page_URL", "inner") \
+            .join(page_visit_counts, "Page_URL", "inner") \
+            .join(interaction_counts, "Interaction_Type", "inner") \
+            .join(device_type_distribution, "Device_Type", "inner") \
+            .join(page_views_by_country, "Country", "inner")
+
+        return result
+
+    @staticmethod
     def avg_duration_per_page(df):
         """
         Calculate average duration on each page in seconds
