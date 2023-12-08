@@ -4,9 +4,7 @@ This file contains code for performing analytics on clickstream data using Apach
 Note: This file is not a real-time stream. It is meant to demonstrate the analytics in the console.
 """
 
-from re import A
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
 from analytics_class import Analytics
 
 spark = SparkSession.builder.appName('ClickstreamAnalytics').getOrCreate()
@@ -30,7 +28,6 @@ Analytics.count_sessions_per_country(clickstream_data).show()
 """
     Calculate page visit counts
 """
-
 Analytics.calculate_page_visit_counts(clickstream_data).show()
 
 """
@@ -52,3 +49,5 @@ Analytics.page_views_by_country(clickstream_data).show()
 
 # Stop SparkSession
 spark.stop()
+
+

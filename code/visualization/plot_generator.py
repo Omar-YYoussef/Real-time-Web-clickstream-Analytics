@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import sys
+sys.path.append(r'\Real-time-Web-clickstream-Analytics\code')
+
 from data_processing.analytics_class import Analytics
 from pyspark.sql import SparkSession
 
@@ -14,14 +17,14 @@ page_visit_counts=Analytics.calculate_page_visit_counts(clickstream_data)
 # Calculate average duration per page URL
 avg_duration_per_page=Analytics.avg_duration_per_page(clickstream_data)
 
-# Count interaction types
+# # Count interaction types
 interaction_counts=Analytics.count_interaction_types(clickstream_data)
 
 
-# Device type distribution
+# # Device type distribution
 device_type_distribution=Analytics.device_type_distribution(clickstream_data)
 
-#Session Per Country
+# #Session Per Country
 Session_per_Country=Analytics.count_sessions_per_country(clickstream_data)
 
 
@@ -42,7 +45,7 @@ sns.set(style="whitegrid")
 
 #plot page view by country
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Country', y='count', data=Session_per_Country_pd)
+sns.barplot(x=page_view_country_pd['Country'], y=page_view_country_pd['count'])
 plt.title('Page view per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -50,7 +53,7 @@ plt.show()
 
 #plot Session per Country
 plt.figure(figsize=(12, 6))
-sns.barplot(x='user_id', y='count', data=Session_per_Country_pd)
+sns.barplot(x='Country', y='Session Count', data=Session_per_Country_pd)
 plt.title('Session per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -66,7 +69,7 @@ plt.show()
 
 # Plot average duration per page
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Page_URL', y='avg_duration', data=avg_duration_per_page_pd)
+sns.barplot(x='Page_URL', y='Avg_Duration_minutes', data=avg_duration_per_page_pd)
 plt.title('Average Duration per Page URL')
 plt.xlabel('Page URL')
 plt.ylabel('Average Duration (s)')

@@ -1,3 +1,4 @@
+from pymysql import connect
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
 
 class Analytics:
@@ -73,7 +74,8 @@ class Analytics:
             .count() \
             .orderBy('count', ascending=False) \
             .sort('count')
-
+        
+        
         return page_visit_counts
 
     @staticmethod
@@ -101,7 +103,7 @@ class Analytics:
             .groupBy('Device_Type') \
             .count() \
             .orderBy('count', ascending=False)
-
+        
         return device_type_distribution
     
     @staticmethod
@@ -115,5 +117,6 @@ class Analytics:
             .groupBy('Country') \
             .count() \
             .orderBy('count', ascending=False)
-
         return page_views_by_country
+    
+
