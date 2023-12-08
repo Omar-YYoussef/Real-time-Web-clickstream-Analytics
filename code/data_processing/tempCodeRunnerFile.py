@@ -46,27 +46,3 @@ Analytics.device_type_distribution(clickstream_data).show()
 
 # Stop SparkSession
 spark.stop()
-
-
-
-
-# Removed
-# # Most common referrer URLs
-# common_referrers = clickstream_data \
-#     .groupBy('Referrer') \
-#     .count() \
-#     .orderBy('count', ascending=False)
-
-# # Show results
-# common_referrers.show()
-
-#########################################
-
-# # Session duration statistics
-# session_duration_stats = clickstream_data \
-#     .groupBy('User_ID', 'Session_Start_Time') \
-#     .agg((max('Timestamp') - min('Timestamp')).alias('Session_Duration')) \
-#     .select(avg('Session_Duration').alias('Avg_Session_Duration'), max('Session_Duration').alias('Max_Session_Duration'), min('Session_Duration').alias('Min_Session_Duration'))
-
-# # Show results
-# session_duration_stats.show()

@@ -1,4 +1,38 @@
+from pymysql import connect
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
+import pandas as pd
+import mysql.connector
+import numpy as np
+
+# Replace these values with your actual database connection details
+db_user = 'bigdata'
+db_pass = 'hytham123'
+host = 'p3nlmysql47plsk.secureserver.net'
+port = 3306
+database_name = 'Clickstream_DB'
+
+# Establish a connection
+conn = mysql.connector.connect(
+    user=db_user,
+    password=db_pass,
+    host=host,
+    port=port,
+    database=database_name
+)
+
+cursor = conn.cursor()
+
+#     data_to_insert = [
+#     ('USA', 100),
+#     ('Canada', 50),
+#     ('UK', 75)
+# ]
+#     for data in data_to_insert:
+#             cursor.execute("INSERT INTO Page_URLCounts (Page_URL, Count) VALUES (%s, %s)", data)
+#         # Commit the transaction
+#             db.connection.commit()
+# Commit the transaction
+conn.commit()
 
 class Analytics:
 
@@ -79,7 +113,7 @@ class Analytics:
             .groupBy('Device_Type') \
             .count() \
             .orderBy('count', ascending=False)
-
+        
         return device_type_distribution
     
     @staticmethod
@@ -93,7 +127,6 @@ class Analytics:
             .groupBy('Country') \
             .count() \
             .orderBy('count', ascending=False)
-        
         return page_views_by_country
     
 
