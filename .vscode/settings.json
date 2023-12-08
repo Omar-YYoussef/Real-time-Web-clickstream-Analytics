@@ -11,7 +11,11 @@
             "server": "p3nlmysql47plsk.secureserver.net",
             "port": 3306,
             "driver": "MySQL",
+<<<<<<< HEAD
             "name": "clickSream",
+=======
+            "name": "ckickSream",
+>>>>>>> 38c3d5835d5c8b41aaed0c8edac1aaa0408f32a3
             "database": "Clickstream_DB",
             "username": "bigdata",
             "password": "hytham123"
