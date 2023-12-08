@@ -1,5 +1,4 @@
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
-import pandas as pd
 
 class Analytics:
 
