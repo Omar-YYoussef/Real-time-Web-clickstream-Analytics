@@ -1,19 +1,13 @@
 from pyspark.sql.functions import min, max, avg, col, floor, countDistinct, desc
 import pandas as pd
-from DBConnection import DB
-
-db = DB()
-# Create a cursor
-cursor = db.connection.cursor()
-
 
 class Analytics:
 
     def __init__(self):
         pass
 
-    # @staticmethod
-    # def avg_duration_per_page(df):
+    @staticmethod
+    def avg_duration_per_page(df):
         """
         Calculate average duration on each page in seconds
         :param df: pandas dataframe
@@ -31,8 +25,8 @@ class Analytics:
 
         return avg_duration_per_page
     
-    # @staticmethod
-    # def count_sessions_per_country(df):
+    @staticmethod
+    def count_sessions_per_country(df):
         """
         Count sessions per country
         :param df: pandas dataframe
@@ -58,44 +52,39 @@ class Analytics:
             .orderBy('count', ascending=False) \
             .sort('count')
         
-        for counnt in page_visit_counts:
-            insert_query = "INSERT INTO Page_URLCounts (Page_URL, Count) VALUES (%s, %s)"
-            # values_to_insert =()
-            cursor.execute(insert_query,counnt)
-            # Commit the transaction
-            db.connection.commit()
+        
         return page_visit_counts
 
-    # @staticmethod
-    # def count_interaction_types(df):
-    #     """
-    #     Count interaction types
-    #     :param df: pandas dataframe
-    #     :return: dataframe with interaction type counts
-    #     """
-    #     interaction_counts = df \
-    #         .groupBy('Interaction_Type') \
-    #         .count() \
-    #         .orderBy('count', ascending=False)
+    @staticmethod
+    def count_interaction_types(df):
+        """
+        Count interaction types
+        :param df: pandas dataframe
+        :return: dataframe with interaction type counts
+        """
+        interaction_counts = df \
+            .groupBy('Interaction_Type') \
+            .count() \
+            .orderBy('count', ascending=False)
 
-    #     return interaction_counts
+        return interaction_counts
     
-    # @staticmethod
-    # def device_type_distribution(df):
-    #     """
-    #     Device type distribution
-    #     :param df: pandas dataframe
-    #     :return: dataframe with device type distribution
-    #     """
-    #     device_type_distribution = df \
-    #         .groupBy('Device_Type') \
-    #         .count() \
-    #         .orderBy('count', ascending=False)
+    @staticmethod
+    def device_type_distribution(df):
+        """
+        Device type distribution
+        :param df: pandas dataframe
+        :return: dataframe with device type distribution
+        """
+        device_type_distribution = df \
+            .groupBy('Device_Type') \
+            .count() \
+            .orderBy('count', ascending=False)
 
-    #     return device_type_distribution
+        return device_type_distribution
     
-    # @staticmethod
-    # def page_views_by_country(df):
+    @staticmethod
+    def page_views_by_country(df):
         """
         Page views by country
         :param df: pandas dataframe
@@ -110,19 +99,3 @@ class Analytics:
     
 
 
-select_query = "SELECT * FROM Page_URLCounts"
-
-# Execute the select query
-cursor.execute(select_query)
-
-# Fetch all rows and create a pandas DataFrame
-columns = [desc[0] for desc in cursor.description]
-data = cursor.fetchall()
-df = pd.DataFrame(data, columns=columns)
-
-# Display the updated DataFrame
-print("Updated Table:")
-print(df)
-# Close the cursor and connection
-cursor.close()
-db.connection.close()
