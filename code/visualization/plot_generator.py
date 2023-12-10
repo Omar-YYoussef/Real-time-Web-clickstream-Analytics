@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
-import pandas as pd
 sys.path.append(r'\Real-time-Web-clickstream-Analytics\code')
 
 from data_processing.analytics_class import Analytics
