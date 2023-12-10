@@ -1,20 +1,21 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from re import A
 import pymysql
 import sys
-sys.path.append(r'\Real-time-Web-clickstream-Analytics\code')
 
+sys.path.append(r'C:\Users\oyoun\OneDrive\Desktop\COLLEGE\3rd Year\1st Semister\BD\Project\Code\code')
+# \Real-time-Web-clickstream-Analytics\code
 from data_processing.analytics_class import Analytics
 
 # Create a Spark session
 spark = SparkSession.builder \
     .appName("Kafka_Consumer") \
     .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.4") \
+    .config("spark.ui.enabled", True) \
     .getOrCreate()
 
-# Display only WARN messages
+# Display only WARN & ERROR messages
 spark.sparkContext.setLogLevel('WARN')
 
 # Define the schema for the dataset
@@ -36,17 +37,19 @@ schema = (
 kafka_topic = "clickstreamV1"
 
 # Read from Kafka topic
+## Number of messages limited to 1000 per trigger
 df = spark.readStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "localhost:9092") \
     .option("subscribe", kafka_topic) \
+    .option("maxOffsetsPerTrigger", 1000) \
     .load() \
     .select(from_json(col("value").cast("string"), schema).alias("data"))
 
-# Cast the value column to string
+# Select all columns from the dataframe
 df = df.select("data.*")
-df = Analytics.all_analytics(df)
 
+# Define a function to insert data into the database
 def insert_into_db(row):
     try:
         # Define the connection details for your PHPMyAdmin database
@@ -84,13 +87,16 @@ def insert_into_db(row):
         print(e)
         exit(1)
 
-# Write to console
+# Perform All analytics
+analytics = Analytics(df)
+df = analytics.count_interaction_types()
+
+# Write to console & database
 query = df.writeStream \
     .outputMode("append") \
+    .format("console") \
     .foreach(insert_into_db) \
     .start()
-    # .format("console") \
 
 # Wait for query termination
-
 query.awaitTermination()

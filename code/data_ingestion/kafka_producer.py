@@ -18,8 +18,8 @@ class FileEventHandler(FileSystemEventHandler):
     def on_created(self, event):
         self.process_file(event.src_path)
 
-    def on_modified(self, event):
-        self.process_file(event.src_path)
+    # def on_modified(self, event):
+    #     self.process_file(event.src_path)
 
     def process_file(self, file_path):
         # Check if the file is a JSON file
