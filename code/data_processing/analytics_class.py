@@ -4,20 +4,17 @@ from pyspark.sql import DataFrame, functions as F, Window
 
 class Analytics:
 
-    def __init__(self, df: DataFrame):
+    @staticmethod
+    def add_watermark(df):
         """
-            Adds a timestamp column to the dataframe
-            :param df: pandas dataframe
+        Add watermark to the dataframe
+        :param df: pandas dataframe
+        :return: dataframe with watermark
         """
-        if df is None:
-            raise ValueError("A DataFrame must be provided")
-        
-        # self.df = df.withColumn('timestamp', current_timestamp().cast(TimestampType())) \
-        #     .withWatermark('timestamp', '5 seconds')   -> casting to Timestamp is error
-        
-        self.df = df.withColumn('timestamp', current_timestamp()) \
-                    .withWatermark('timestamp', '5 seconds')
-    
+        df = df.withColumn('timestamp', current_timestamp().cast(TimestampType())) \
+            .withWatermark('timestamp', '1 minute')
+        return df
+
     def avg_duration_per_page(self):
         """
         Calculate average duration on each page in seconds
@@ -48,17 +45,20 @@ class Analytics:
             .withColumnRenamed("count", "Session Count")
 
         return sessions_per_country
-    
-    def calculate_page_visit_counts(self):
+
+    @staticmethod
+    def calculate_page_visit_counts(df):
         """
         Calculate page visit counts
         :param df: pandas dataframe
         :return: dataframe with page visit counts
-        """
-        page_visit_counts = self.df \
-            .groupBy(col('Page_URL'), "timestamp") \
-            .count()       
-        
+        """        
+        page_visit_counts = df \
+            .groupBy(col('Page_URL')) \
+            .count() \
+            .withColumnRenamed("count", "pageUrlCount") \
+            # .orderBy('count', ascending=False)
+
         return page_visit_counts, ['pageUrl', 'pageUrlCount'], 'page_visit_counts'
     
     def count_interaction_types(self):
