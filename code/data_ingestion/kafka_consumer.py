@@ -51,36 +51,41 @@ df = df.select("data.*")
 # df = Analytics.add_watermark(df)
 df, column_names, table_name  = Analytics.calculate_page_visit_counts(df)
 
-# Define a function to insert data into the database
-def insert_into_db(df, epoch_id):
-    # Convert the DataFrame to a list of tuples
-    rows = [(row['Page_URL'], row['pageUrlCount']) for row in df.collect()]
-
+def insert_into_db(row):
     try:
-        # Define the connection details for your database
+        # Define the connection details for your PHPMyAdmin database
         host = "localhost"
         port = 3306
         database = "Clickstream_DB"
         username = "root"
         password = ""
         conn = pymysql.connect(host=host, port=port, user=username, password=password, db=database)
-
         cursor = conn.cursor()
-        sql_query = "INSRT INTO `page_visit_counts` (pageUrl, pageUrlCount) VALUES (%s, %s)"
-        cursor.executemany(sql_query, rows)
+
+        # Extract the required columns from the row
+        column1_value = row.Page_URL
+        column2_value = row.pageUrlCount
+
+        # Prepare the SQL query to insert data into the table
+        sql_query = f"INSERT INTO `page_visit_counts` (pageUrl, pageUrlCount) VALUES ('{column1_value}', '{column2_value}')"
+
+        # Execute the SQL query
+        cursor.execute(sql_query)
+
         # Commit the changes
         conn.commit()
-        conn.close()
     except Exception as e:
         print(e)
-        exit(1)
+    finally:
+        if conn:
+            conn.close()
 
 # Write to console & database
 query = df.writeStream \
-    .outputMode("complete") \
+    .outputMode("update") \
     .foreach(insert_into_db) \
-    .format("console") \
     .start()
+    # .format("console") \
 
 # Wait for query termination
 query.awaitTermination()
