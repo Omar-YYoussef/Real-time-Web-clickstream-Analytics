@@ -12,8 +12,11 @@ class Analytics:
         if df is None:
             raise ValueError("A DataFrame must be provided")
         
-        self.df = df.withColumn('timestamp', current_timestamp().cast(TimestampType())) \
-            .withWatermark('timestamp', '5 seconds')
+        # self.df = df.withColumn('timestamp', current_timestamp().cast(TimestampType())) \
+        #     .withWatermark('timestamp', '5 seconds')   -> casting to Timestamp is error
+        
+        self.df = df.withColumn('timestamp', current_timestamp().cast(StringType())) \
+                    .withWatermark('timestamp', '5 seconds')
     
     def avg_duration_per_page(self):
         """
