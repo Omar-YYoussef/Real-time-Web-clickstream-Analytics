@@ -110,5 +110,5 @@ class Analytics:
 
         popular_paths_df = paths_df.groupBy("Path").agg(count("*").alias("Count")).orderBy("Count", ascending=False)
 
-        return popular_paths_df, ['path', 'pathCount'], 'popular_paths'
+        return popular_paths_df
     

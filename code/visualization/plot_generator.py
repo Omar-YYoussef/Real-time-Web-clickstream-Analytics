@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
-sys.path.append(r'C:\Users\oyoun\OneDrive\Desktop\COLLEGE\3rd Year\1st Semister\BD\Project\Code\code')
+sys.path.append(r'D:\Real-time-Web-clickstream-Analytics\code')
 
 from data_processing.analytics_class import Analytics
 from pyspark.sql import SparkSession
@@ -11,24 +11,24 @@ spark = SparkSession.builder.appName('Plotting_data').getOrCreate()
 clickstream_data = spark.read.csv('data/data_stream/Dataset.csv', header=True, inferSchema=True)
 
 # calculate Page visits
-page_visit_counts=Analytics.calculate_page_visit_counts()
+page_visit_counts,_,_=Analytics.calculate_page_visit_counts(clickstream_data)
 
 # Calculate average duration per page URL
-avg_duration_per_page=Analytics.avg_duration_per_page()
+avg_duration_per_page,_,_=Analytics.avg_duration_per_page(clickstream_data)
 
 # # Count interaction types
-interaction_counts=Analytics.count_interaction_types()
+interaction_counts,_,_=Analytics.count_interaction_types(clickstream_data)
 
 
 # # Device type distribution
-device_type_distribution=Analytics.device_type_distribution()
+device_type_distribution,_,_=Analytics.device_type_distribution(clickstream_data)
 
 # #Session Per Country
-Session_per_Country=Analytics.count_sessions_per_country()
+Session_per_Country,_,_=Analytics.count_sessions_per_country(clickstream_data)
 
 
 #Page viewing by country
-page_view_country=Analytics.page_views_by_country()
+page_view_country,_,_=Analytics.page_views_by_country(clickstream_data)
 
 # Convert Spark DataFrames to Pandas DataFrames for plotting
 page_visit_counts_pd = page_visit_counts.toPandas()
@@ -44,7 +44,8 @@ sns.set(style="whitegrid")
 
 #plot page view by country
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Country', y='count',data=page_view_country_pd)
+# sns.barplot(x='Country', y='count',data=page_view_country_pd)
+plt.plot(x='Country', y='count',data=page_view_country_pd)
 plt.title('Page view per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -52,7 +53,7 @@ plt.show()
 
 #plot Session per Country
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Country', y='Session Count', data=Session_per_Country_pd)
+sns.barplot(x='Country', y='count', data=Session_per_Country_pd)
 plt.title('Session per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -60,7 +61,7 @@ plt.show()
 
 # Plot page visit counts
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Page_URL', y='count', data=page_visit_counts_pd)
+sns.barplot(x='Page_URL', y='pageUrlCount', data=page_visit_counts_pd)
 plt.title('Page Visit Counts')
 plt.xlabel('Page URL')
 plt.ylabel('Count')

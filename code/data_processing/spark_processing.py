@@ -49,8 +49,8 @@ clickstream_data = spark.read.csv('data/data_stream/Dataset.csv', header=True, i
 """
     Identify popular paths
 """
-analytics = Analytics(clickstream_data)
-analytics.device_type_distribution().show(truncate=False)
+df=Analytics.identify_popular_paths_non_stream(clickstream_data)
+df.show()
 
 # Stop SparkSession
 spark.stop()
