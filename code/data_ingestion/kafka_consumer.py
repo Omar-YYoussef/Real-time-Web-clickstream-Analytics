@@ -3,7 +3,7 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import pymysql
 import sys
-sys.path.append(r'C:\Users\oyoun\OneDrive\Desktop\COLLEGE\3rd Year\1st Semister\BD\Project\Code\code')
+sys.path.append(r'D:\Real-time-Web-clickstream-Analytics\code')
 from data_processing.analytics_class import Analytics
 
 # Create a Spark session

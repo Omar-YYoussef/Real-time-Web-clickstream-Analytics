@@ -44,8 +44,7 @@ sns.set(style="whitegrid")
 
 #plot page view by country
 plt.figure(figsize=(12, 6))
-# sns.barplot(x='Country', y='count',data=page_view_country_pd)
-plt.plot(x='Country', y='count',data=page_view_country_pd)
+sns.lineplot(x='Country', y='count',data=page_view_country_pd)
 plt.title('Page view per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -53,7 +52,7 @@ plt.show()
 
 #plot Session per Country
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Country', y='count', data=Session_per_Country_pd)
+sns.lineplot(x='Country', y='count', data=Session_per_Country_pd)
 plt.title('Session per Country Counts')
 plt.xlabel('Country')
 plt.ylabel('Count')
@@ -61,7 +60,7 @@ plt.show()
 
 # Plot page visit counts
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Page_URL', y='pageUrlCount', data=page_visit_counts_pd)
+sns.lineplot(x='Page_URL', y='pageUrlCount', data=page_visit_counts_pd)
 plt.title('Page Visit Counts')
 plt.xlabel('Page URL')
 plt.ylabel('Count')
@@ -69,7 +68,7 @@ plt.show()
 
 # Plot average duration per page
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Page_URL', y='Avg_Duration_minutes', data=avg_duration_per_page_pd)
+sns.lineplot(x='Page_URL', y='Avg_Duration_seconds', data=avg_duration_per_page_pd)
 plt.title('Average Duration per Page URL')
 plt.xlabel('Page URL')
 plt.ylabel('Average Duration (s)')
@@ -77,7 +76,7 @@ plt.show()
 
 # Plot interaction counts
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Interaction_Type', y='count', data=interaction_counts_pd)
+sns.lineplot(x='Interaction_Type', y='count', data=interaction_counts_pd)
 plt.title('Interaction Type Counts')
 plt.xlabel('Interaction Type')
 plt.ylabel('Count')
@@ -85,7 +84,7 @@ plt.show()
 
 # Plot device type distribution
 plt.figure(figsize=(12, 6))
-sns.barplot(x='Device_Type', y='count', data=device_type_distribution_pd)
+sns.lineplot(x='Device_Type', y='count', data=device_type_distribution_pd)
 plt.title('Device Type Distribution')
 plt.xlabel('Device Type')
 plt.ylabel('Count')
