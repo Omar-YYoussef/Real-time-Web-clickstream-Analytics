@@ -48,8 +48,7 @@ df = spark.readStream \
 df = df.select("data.*")
 
 # Perform All analytics
-# df = Analytics.add_watermark(df)
-df, column_names, table_name  = Analytics.calculate_page_visit_counts(df)
+df, column_names, table_name  = Analytics.page_views_by_country(df)
 
 def insert_into_db(df, epoch_id):
     # Convert the DataFrame to a Pandas DataFrame
@@ -66,13 +65,33 @@ def insert_into_db(df, epoch_id):
 
     try:
         for index, row in df.iterrows():
+            column_values = []
             # Extract the required columns from the row
-            column1_value = row['Page_URL']
-            column2_value = row['pageUrlCount']
+            for i in row:
+                column_values.append(i)
 
-            # Prepare the SQL query to insert data into the table
-            sql_query = f"INSERT INTO `page_visit_counts` (pageUrl, pageUrlCount) VALUES ('{column1_value}', '{column2_value}')"
+            # Define the SQL query
+            sql_query = f"INSERT INTO {table_name} ("
 
+            # Add column names to the SQL query
+            for i in range(len(column_names)):
+                sql_query += f"{column_names[i]}, "
+
+            # Remove the trailing comma and space
+            sql_query = sql_query[:-2]
+
+            # Complete the SQL query
+            sql_query += ") VALUES ("
+
+            # Add column values to the SQL query
+            for i in range(len(column_values)):
+                sql_query += f"'{column_values[i]}', "
+
+            # Remove the trailing comma and space
+            sql_query = sql_query[:-2]
+
+            sql_query += ")"
+            print(sql_query)
             # Execute the SQL query
             cursor.execute(sql_query)
 
@@ -86,7 +105,7 @@ def insert_into_db(df, epoch_id):
 
 # Write to console & database
 query = df.writeStream \
-    .outputMode("update") \
+    .outputMode("complete") \
     .foreachBatch(insert_into_db) \
     .start()
     # .format("console") \
