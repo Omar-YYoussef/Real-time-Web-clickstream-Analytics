@@ -3,7 +3,7 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 import pymysql
 import sys
-sys.path.append(r'\Real-time-Web-clickstream-Analytics\code')
+sys.path.append(r'C:\Users\oyoun\OneDrive\Desktop\COLLEGE\3rd Year\1st Semister\BD\Project\Code\code')
 from data_processing.analytics_class import Analytics
 
 # Create a Spark session
@@ -47,10 +47,14 @@ df = spark.readStream \
 # Select all columns from the dataframe
 df = df.select("data.*")
 
+# Perform All analytics
+analytics = Analytics(df)
+df, column_names, table_name  = analytics.calculate_page_visit_counts()
+
 # Define a function to insert data into the database
 def insert_into_db(row):
     try:
-        # Define the connection details for your PHPMyAdmin database
+        # # Define the connection details for your PHPMyAdmin database
         host = "p3nlmysql47plsk.secureserver.net"
         port = 3306
         database = "Clickstream_DB"
@@ -60,21 +64,35 @@ def insert_into_db(row):
         conn = pymysql.connect(host=host, port=port, user=username, password=password, db=database)
         cursor = conn.cursor()
 
+        column_values = []
         # Extract the required columns from the row
-        column1_value = row.user_id
-        column2_value = row.Session_Start_Time
-        column3_value = row.Page_URL
-        column4_value = row.Timestamp
-        column5_value = row.Duration_on_Page_s
-        column6_value = row.Interaction_Type
-        column7_value = row.Device_Type
-        column8_value = row.Browser
-        column9_value = row.Country
-        column10_value = row.Referrer
+        for i in row:
+            column_values+=(i)
 
-        # Prepare the SQL query to insert data into the table
-        sql_query = f"INSERT INTO DataSet (user_id, Session_Start_Time, Page_URL, Timestamp, Duration_on_Page_s, Interaction_Type, Device_Type, Browser, Country, Referrer) VALUES ('{column1_value}', '{column2_value}','{column3_value}','{column4_value}','{column5_value}','{column6_value}','{column7_value}','{column8_value}','{column9_value}','{column10_value}')"
-        
+        # Define the SQL query
+        sql_query = f"INSERT INTO {table_name} ("
+
+        # Add column names to the SQL query
+        for i in range(len(column_names)):
+            sql_query += f"{column_names[i]}, "
+
+        # Remove the trailing comma and space
+        sql_query = sql_query[:-2]
+
+        # Complete the SQL query
+        sql_query += ") VALUES ("
+
+        # Add column values to the SQL query
+        for i in range(len(column_values)):
+            sql_query += f"'{column_values[i]}', "
+
+        # Remove the trailing comma and space
+        sql_query = sql_query[:-2]
+
+        sql_query += ")"
+
+        print(sql_query)
+
         # Execute the SQL query
         cursor.execute(sql_query)
 
@@ -85,9 +103,6 @@ def insert_into_db(row):
         print(e)
         exit(1)
 
-# Perform All analytics
-analytics = Analytics(df)
-df = analytics.count_interaction_types()
 
 # Write to console & database
 query = df.writeStream \

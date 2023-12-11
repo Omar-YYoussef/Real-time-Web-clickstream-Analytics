@@ -15,7 +15,7 @@ class Analytics:
         # self.df = df.withColumn('timestamp', current_timestamp().cast(TimestampType())) \
         #     .withWatermark('timestamp', '5 seconds')   -> casting to Timestamp is error
         
-        self.df = df.withColumn('timestamp', current_timestamp().cast(StringType())) \
+        self.df = df.withColumn('timestamp', current_timestamp()) \
                     .withWatermark('timestamp', '5 seconds')
     
     def avg_duration_per_page(self):
@@ -57,12 +57,9 @@ class Analytics:
         """
         page_visit_counts = self.df \
             .groupBy(col('Page_URL'), "timestamp") \
-            .count()
-            # .orderBy('count', ascending=False) \
-            # .sort('count')
+            .count()       
         
-        
-        return page_visit_counts
+        return page_visit_counts, ['pageUrl', 'pageUrlCount'], 'page_visit_counts'
     
     def count_interaction_types(self):
         """
